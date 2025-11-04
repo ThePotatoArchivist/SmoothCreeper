@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "smoothcreeper",
+	"version": "${version}",
+	"name": "Smooth Creeper",
+	"description": "Creeper explosions apply Silk Touch and drop all blocks",
+	"authors": [
+		"ThePotatoArchivist"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/smooth-creeper",
+		"sources": "https://github.com/ThePotatoArchivist/SmoothCreeper"
+	},
+	"license": "MIT",
+	"icon": "assets/smoothcreeper/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"archives.tater.smoothcreeper.SmoothCreeper"
+		]
+	},
+	"mixins": [
+		"smoothcreeper.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21.10",
+		"java": ">=21"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

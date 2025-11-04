@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "archives.tater.smoothcreeper.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BlockBehaviourMixin",
+    "GameRulesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+	}
+}
