@@ -25,6 +25,6 @@ public class BlockBehaviourMixin {
             index = 1
     )
     private Object changeTool(Object object, @Local(argsOnly = true) ServerLevel level, @Local(argsOnly = true) Explosion explosion) {
-        return explosion.getDirectSourceEntity() instanceof Creeper ? SmoothCreeper.TOOL.apply(level) : object;
+        return explosion.getDirectSourceEntity() instanceof Creeper ? SmoothCreeper.TOOL.apply(level.registryAccess()) : object;
     }
 }
