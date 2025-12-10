@@ -3,12 +3,11 @@ package archives.tater.smoothcreeper;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +30,9 @@ public class SmoothCreeper implements ModInitializer {
 
     public static final Function<RegistryAccess, ItemStack> TOOL = weakMemoize(registryAccess -> {
         var stack = Items.DIAMOND_PICKAXE.getDefaultInstance();
-        var enchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
-        enchantments.set(registryAccess.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), 1);
-        stack.set(DataComponents.ENCHANTMENTS, enchantments.toImmutable());
+        EnchantmentHelper.updateEnchantments(stack, enchantments ->
+            enchantments.set(registryAccess.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), 1)
+        );
         return stack;
     });
 
