@@ -2,39 +2,41 @@ package archives.tater.smoothcreeper;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.providers.EnchantmentProvider;
+import net.minecraft.world.item.enchantment.providers.VanillaEnchantmentProviders;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.WeakHashMap;
-import java.util.function.Function;
-
 public class SmoothCreeper implements ModInitializer {
 	public static final String MOD_ID = "smoothcreeper";
+
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
+    }
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    private static <T, R> Function<T, R> weakMemoize(Function<T, R> transform) {
-        var cache = new WeakHashMap<T, R>();
-        return t -> cache.computeIfAbsent(t, transform);
-    }
+    public static final ResourceKey<EnchantmentProvider> CREEPER_LOOT_DROP = ResourceKey.create(Registries.ENCHANTMENT_PROVIDER, id("creeper_loot_drop"));
 
-    public static final Function<RegistryAccess, ItemStack> TOOL = weakMemoize(registryAccess -> {
+    public static ItemStack getTool(ServerLevel level, Entity creeper) {
         var stack = Items.DIAMOND_PICKAXE.getDefaultInstance();
-        EnchantmentHelper.updateEnchantments(stack, enchantments ->
-            enchantments.set(registryAccess.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), 1)
-        );
+
+        EnchantmentHelper.enchantItemFromProvider(stack, level.registryAccess(), VanillaEnchantmentProviders.ENDERMAN_LOOT_DROP, level.getCurrentDifficultyAt(creeper.blockPosition()), creeper.getRandom());
+
         return stack;
-    });
+    }
 
 	@Override
 	public void onInitialize() {
